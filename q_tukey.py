@@ -69,6 +69,7 @@ def q_tukey(k, v, alpha):
             #print(q,f[i],fs[i])
             
         qarray.append(q_critical)
+        plt.scatter(q_critical,(1-alpha))
     
         f = np.array(f)
         fs = np.array(fs)
