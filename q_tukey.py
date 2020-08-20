@@ -1,6 +1,6 @@
 import numpy as np
-import scipy.stats as stats
 import matplotlib.pyplot as plt
+import scipy.stats as stats 
 from scipy.special import gamma
 
 def q_tukey(k, v, alpha):
@@ -25,31 +25,37 @@ def q_tukey(k, v, alpha):
             xl = 0.0
             dx = (xh-xl)/npts
 
-            # Loop over x to integrate
-            xsum = 0.0
-            for x in np.arange(xl,xh,dx):
-                phi_x = stats.norm.pdf(np.sqrt(v)*x)
+            x = np.arange(xl,xh,dx)
+            x = x.reshape(1,-1)
     
-                ul = -5.0
-                uh = 5.0
-                du = (uh-ul)/npts
+            ul = -5.0
+            uh = 5.0
+            du = (uh-ul)/npts
             
-                u = np.arange(ul,uh,du)
-                phi_u = stats.norm.pdf(u)
-                phi_ux = stats.norm.pdf(u-q*x)
-                Phi_u = stats.norm.cdf(u)
-                Phi_ux = stats.norm.cdf(u-q*x)
-                integrand = phi_u*phi_ux*(Phi_u-Phi_ux)**(k-2)*du
-                #print(u,phi_u,phi_ux,Phi_u,Phi_ux,integrand)
+            u = np.arange(ul,uh,du)
+            u = u.reshape(-1,1)
+            
+            phi_u = stats.norm.pdf(u)
+            phi_ux = stats.norm.pdf(u-q*x)
+            Phi_u = stats.norm.cdf(u)
+            Phi_ux = stats.norm.cdf(u-q*x)
+            phi_x = stats.norm.pdf(np.sqrt(v)*x)
+            
+            integrand = x**v*phi_x*phi_u*phi_ux*(Phi_u-Phi_ux)**(k-2)*du*dx
+            
+            #print ("U integral matrix")
+            #print(u,phi_u,phi_ux,Phi_u,Phi_ux,phi_x,x**v,integrand)
         
-                sumu = integrand.sum()
-        
-                #print(x,sumu)
-        
-                integrand2 = x**v*phi_x*sumu*dx
-                xsum += integrand2
+            sumux = integrand.sum()
+            
+            #print ("U sum")
+            #print(sumux)
+            
+            #print ("X sum * prefactor")
+            #print (sumux*prefactor)
 
-            f.append(xsum*prefactor)
+            f.append(sumux*prefactor)
+            
             if (i>0):
                 fs.append(f[i]*dq+fs[i-1])
             else:
@@ -61,11 +67,12 @@ def q_tukey(k, v, alpha):
                 found = True
         
             #print(q,f[i],fs[i])
+            
         qarray.append(q_critical)
     
         f = np.array(f)
         fs = np.array(fs)
-        #plt.plot(qd,fs)
+        plt.plot(qd,fs)
 
     qarray=np.array(qarray)
     return qarray
