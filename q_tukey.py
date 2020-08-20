@@ -9,7 +9,7 @@ def q_tukey(k, v, alpha):
     for k in range(2,k+1):
         print ("q_tukey: calculating k = ",k)
 
-        dq = 0.004
+        dq = 0.003
         qd = np.array(np.arange(0.000,6.000,dq))
 
         f = []
@@ -19,17 +19,17 @@ def q_tukey(k, v, alpha):
         for i in range(len(qd)):
             q = qd[i]
             prefactor = np.sqrt(2.0*np.pi)*k*(k-1)*v**(v/2.0)/(gamma(v/2.0)*2**(v/2.0-1))
-            npts = 30
+            npts = 100
 
-            xh = 5.0
+            xh = 6.0
             xl = 0.0
             dx = (xh-xl)/npts
 
             x = np.arange(xl,xh,dx)
             x = x.reshape(1,-1)
     
-            ul = -5.0
-            uh = 5.0
+            ul = -6.0
+            uh = 6.0
             du = (uh-ul)/npts
             
             u = np.arange(ul,uh,du)
