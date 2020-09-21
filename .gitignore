@@ -3,3 +3,4 @@ JupyterNotebooks/.ipynb_checkpoints/*
 AssignmentTemplates/.ipynb_checkpoints/*
 Untitled*.ipynb
 JupyterNotebooks/__pycache__/*
+__pycache__/*
